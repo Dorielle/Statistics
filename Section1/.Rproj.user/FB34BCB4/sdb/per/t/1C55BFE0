@@ -1,20 +1,19 @@
 {
     "collab_server" : "",
     "contents" : "# Statistics for Computer Science\n# Home Assignment 1\n# Section 1 - PCA\n\n## Libraries & Clean-Up ####\ninstall.packages(\"ggplot2\")\ninstall.packages(\"factoextra\")\nlibrary(ggplot2)\nlibrary(factoextra)\n\nrm(list=ls())\n\n## Data Initialisation ####\nseeds <- read.csv(\"seed_dataset.csv\")\nhead(seeds)\nsummary(seeds)\n\n## PCA Functions ####\n# PCA on the first 7 attributes\npca = prcomp(seeds[,-8], scale=TRUE)\nsummary(pca)\n\n# Eigen Values\neig <- (pca$sdev)^2\neig\n\nvar <- eig*100/sum(eig)\nvar\n\ncumVar <- cumsum(var)\ncumVar\n\neigVarCum <- data.frame(eigenValue=eig, variance=var, cumulativeVarience=cumVar)\neigVarCum\n\n# Loadings\nhead(pca$rotation)\n\n# Principle Components (scores)\nhead(pca$x)\n\nseeds2 <- cbind(seeds, pca$x[,1:2])\nhead(seeds2)\n\nwrite.csv(file=\"seeds2.csv\", x=seeds2)\n\n## PCA Visualisations ####\n# DF with scores\nscores = as.data.frame(pca$x)\n\n# Obervations Plot\nggplot(data = scores, aes(x = PC1, y = PC2, label = rownames(scores))) +\n  geom_hline(yintercept = 0, colour = \"gray65\") +\n  geom_vline(xintercept = 0, colour = \"gray65\") +\n  geom_text(colour = \"tomato\", alpha = 0.8, size = 4) +\n  ggtitle(\"PCA plot of Seed\")\n\n# Scree plot - visualising eigenvalues\nplot(pca, type=\"l\", main=\"Scree Plot\")\nfviz_eig(pca)\n\nbiplot(pca, scale=0)",
-    "created" : 1515486310078.000,
+    "created" : 1515701213293.000,
     "dirty" : false,
     "encoding" : "UTF-8",
-    "folds" : "4|24|11|0|\n12|23|16|0|\n17|17|45|0|\n46|22|61|20|\n",
+    "folds" : "",
     "hash" : "3452363411",
-    "id" : "9D6917D5",
+    "id" : "1C55BFE0",
     "lastKnownWriteTime" : 1515578129,
-    "last_content_update" : 1515578129874,
+    "last_content_update" : 1515578129,
     "path" : "C:/Users/dorad/Desktop/SCS/Statistics/Section1/PCA.R",
     "project_path" : "PCA.R",
     "properties" : {
-        "tempName" : "Untitled1"
     },
-    "relative_order" : 1,
+    "relative_order" : 2,
     "source_on_save" : false,
     "source_window" : "",
     "type" : "r_source"
