@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "install.packages(\"clue\")\nlibrary(\"clue\")\ninstall.packages(\"caret\", dependencies=TRUE)\nlibrary(\"caret\")\ndata(iris)\n\n\ntrainingIndexes <- sample(150, 135)\n\ntrainingData = iris[trainingIndexes, 1:4]\ntestData = iris[-trainingIndexes, 1:4]\n\nk <- kmeans(trainingData, 3)\n\ntestClustering = cl_predict(k, testData)\n\ntrainingClustering = k$cluster\ntrainingClustering = replace(trainingClustering, trainingClustering==3, \"setosa\")\ntrainingClustering = replace(trainingClustering, trainingClustering==2, \"versicolor\")\ntrainingClustering = replace(trainingClustering, trainingClustering==1, \"virginica\")\n\ntableTraining = table(trainingClustering, iris[trainingIndexes,5])\n\n\ntestClustering = replace(testClustering, testClustering==3, \"setosa\")\ntestClustering = replace(testClustering, testClustering==2, \"versicolor\")\ntestClustering = replace(testClustering, testClustering==1, \"virginica\")\n\ntableTest = table(testClustering, iris[-trainingIndexes,5])\n\nconfusionMatrix(trainingClustering, iris[trainingIndexes, 5]",
+    "created" : 1515845807738.000,
+    "dirty" : true,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "1822618017",
+    "id" : "1BFEA1AF",
+    "lastKnownWriteTime" : 3419473787924512768,
+    "last_content_update" : 1515845848500,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

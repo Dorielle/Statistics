@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "# Statistics for Computer Science\n# Home Assignment 1\n# Section 1 - Clustering\n\n#### Task 3 ####\n## Libraries & Clean-Up ####\nrm(list=ls())\n\ninstall.packages(\"cluster\")\ninstall.packages(\"ggplot2\")\ninstall.packages(\"ggfortify\")\ninstall.packages(\"clue\")\ninstall.packages(\"descr\")\ninstall.packages(\"gmodels\")\ninstall.packages(\"caret\")\nlibrary(cluster)\nlibrary(ggplot2)\nlibrary(ggfortify)\nlibrary(clue)\nlibrary(descr)\nlibrary(gmodels)\nlibrary(caret)\n\n## Data Initialisation ####\nseeds <- read.csv(\"seed_dataset.csv\")\nhead(seeds)\nsummary(seeds)\n\n## K-means ####\n# Set seed so that the clustering results do not change from run to run\n# This happens since k-means is a randomised clustering algoithm\nset.seed(456); \n\n# Remove the variety variable \n# and create a new dataframe with the features only\nseeds.features = seeds\nseeds.features$variety <- NULL\n\n# Create k-means\n# with k (number of clusters) set to 3\n# 3 is chosen as we know from the summary that there are 3 seed varietes in the dataset\nkmeansResult <- kmeans(seeds.features, 3)  \nkmeansResult\n\n## Visualisation of K-means results ####\ntable(seeds$variety,kmeansResult$cluster)\n\nclusplot(seeds.features,  kmeansResult$cluster, main='2D representation of k-means cluster solution',\n         color=TRUE, shade=FALSE, labels=2, lines=0)\n\nclusplot(seeds,  seeds$variety, main='2D representation of k-means cluster solution',\n         color=TRUE, shade=FALSE, labels=2, lines=0)\n\nplot(seeds[c(\"kernelLength\", \"kernelWidth\")], col=kmeansResult$cluster, main=\"k-means clusters\")\nplot(seeds[c(\"kernelLength\", \"kernelWidth\")], col=seeds$variety,  main=\"original data cluster\")\n\nplot(seeds[c(\"area\", \"parameter\")], col=kmeansResult$cluster, main=\"k-means clusters\")\nplot(seeds[c(\"area\", \"parameter\")], col=seeds$variety, main=\"original data cluster\")\n\nplot(seeds[c(\"asymmetryCoefficient\", \"kernelGroveLength\")], col=kmeansResult$cluster, main=\"k-means clusters\")\nplot(seeds[c(\"asymmetryCoefficient\", \"kernelGroveLength\")], col=seeds$variety,  main=\"original data cluster\") \n\nggplot(seeds, aes(kernelLength, kernelWidth, color = variety)) + geom_point()\n\nkmeansResult$cluster <- as.factor(kmeansResult$cluster)\nggplot(seeds, aes(kernelLength, kernelWidth, color = kmeansResult$cluster)) + geom_point()\n\nautoplot(pam(seeds[-8], 3), frame = TRUE, frame.type = 'norm')\n\n\n\n\n#### Task 4 ####\n## Split data ####\n# Method to scale and normalize the data\nnormalize <- function(x) {\n  num <- x - min(x)\n  denom <- max(x) - min(x)\n  \n  return (num/denom)\n}\n\nset.seed(455);\nd.rows <- nrow(seeds)\nd.sample <- sample(d.rows, d.rows*0.8)\nd.train <- seeds[d.sample,]\nd.test <- seeds[-d.sample,]\n\nseed_norm <- as.data.frame(lapply(seeds[1:7], normalize))\n\nind <- sample(2, nrow(seeds), replace=TRUE, prob=c(0.8,0.2))\n\nseed.training <- seed_norm[ind==1, 1:7]\nseed.test <- seed_norm[ind==2, 1:7]\n\nseed.trainLabels <- seeds[ind==1, 8]\nseed.testLabels <- seeds[ind==2, 8]\n\n## k-means on training data ####\nseeds_train_Data <- kmeans(seed.training, 3, nstart = 750)\ntable(seeds_train_Data$cluster,seed.trainLabels)\n\n## k-means on testing data ####\nresult <- cl_predict(seeds_train_Data,seed.test)\nconf_tbl <- table(seed.testLabels,result)\nconf_tbl\n\n## Confusion matrix ####\ntraining.clustering <- seeds_train_Data$cluster\nconfusionMatrix(training.clustering, seeds[ind, 8])\n",
+    "created" : 1515701196045.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "75|26|80|0|\n",
+    "hash" : "2587696575",
+    "id" : "3DFE6CAE",
+    "lastKnownWriteTime" : 1515842082,
+    "last_content_update" : 1515845544015,
+    "path" : "C:/Users/dorad/Desktop/SCS/Statistics/Section1/Clustering.R",
+    "project_path" : "Clustering.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
